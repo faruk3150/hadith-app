@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>দৈনিক হাদিস ও দোয়া</title>
+
+<!--
+  ============================================================
+  MONETAG AD SCRIPT — এখানে আপনার নিজের Monetag zone script বসান
+  Monetag ড্যাশবোর্ড থেকে "Multi-tag / In-App" script কপি করে
+  এই কমেন্টের জায়গায় পেস্ট করুন।
+  ============================================================
+-->
+<!-- <script src='YOUR_MONETAG_SCRIPT_URL_HERE'></script> -->
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Serif+Bengali:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap');
+
+  :root{
+    --ink: #12332B;
+    --ink-deep: #0C2620;
+    --parchment: #F7F3E9;
+    --parchment-dim: #EAE3D2;
+    --gold: #C9A24B;
+    --gold-soft: rgba(201,162,75,0.35);
+    --sage: #7A9284;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0; padding:0;
+    min-height:100vh;
+    background: radial-gradient(ellipse at top, var(--ink) 0%, var(--ink-deep) 100%);
+    color: var(--parchment);
+    font-family: 'Noto Serif Bengali', serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .card{ animation: rise 0.5s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes rise{
+      from{ opacity:0; transform: translateY(14px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+  }
+
+  .app{
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 20px 90px;
+  }
+
+  header{
+    text-align:center;
+    margin-bottom: 22px;
+  }
+  .eyebrow{
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: var(--sage);
+    margin-bottom: 6px;
+  }
+  h1{
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--parchment);
+  }
+  .date-line{
+    font-size: 12px;
+    color: var(--sage);
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .card{
+    background: var(--parchment);
+    color: var(--ink-deep);
+    border-radius: 18px;
+    padding: 30px 22px 26px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border: 1px solid var(--gold-soft);
+    border-radius: 18px;
+    pointer-events:none;
+  }
+
+  .kind-tag{
+    display:inline-block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold-soft);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+
+  .arabic{
+    font-family: 'Noto Naskh Arabic', serif;
+    font-size: 26px;
+    line-height: 2.1;
+    text-align: right;
+    direction: rtl;
+    color: var(--ink-deep);
+  }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin: 20px 0;
+  }
+  .divider .arc{
+    flex:1;
+    height:1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .divider .dot{
+    width:5px; height:5px;
+    border-radius:50%;
+    background: var(--gold);
+  }
+
+  .bangla{
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--ink-deep);
+  }
+
+  .reference{
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--sage);
+    border-top: 1px dashed var(--gold-soft);
+    padding-top: 12px;
+  }
+
+  .controls{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    margin-top: 22px;
+  }
+  .nav-btn{
+    background: transparent;
+    border: 1px solid var(--gold-soft);
+    color: var(--parchment);
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  .nav-btn:active{ transform: scale(0.96); }
+  .nav-btn:hover{ background: rgba(201,162,75,0.12); }
+  .nav-btn:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .counter{
+    font-size: 12px;
+    color: var(--sage);
+    letter-spacing: 0.06em;
+  }
+
+  .share-btn{
+    margin-top: 16px;
+    width:100%;
+    background: var(--gold);
+    color: var(--ink-deep);
+    border:none;
+    font-family: 'Noto Serif Bengali', serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    padding: 13px;
+    border-radius: 12px;
+    cursor:pointer;
+    transition: filter 0.2s ease, transform 0.15s ease;
+  }
+  .share-btn:active{ transform: scale(0.98); }
+  .share-btn:hover{ filter: brightness(1.06); }
+  .share-btn:focus-visible{ outline: 2px solid var(--parchment); outline-offset: 2px; }
+
+  footer{
+    margin-top: auto;
+    padding-top: 26px;
+    text-align:center;
+    font-size: 11px;
+    color: var(--sage);
+    letter-spacing: 0.05em;
+  }
+
+  /* Ad slot placeholder — Monetag script above will inject creatives; this is just a
+     reserved, non-intrusive spot so layout doesn't jump when an ad loads. */
+  .ad-slot{
+    margin-top: 18px;
+    min-height: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div class="eyebrow">প্রতিদিনের আলো</div>
+    <h1>দৈনিক হাদিস ও দোয়া</h1>
+    <div class="date-line" id="dateLine"></div>
+  </header>
+
+  <main>
+    <div class="card" id="card">
+      <span class="kind-tag" id="kindTag">হাদিস</span>
+      <div class="arabic" id="arabicText"></div>
+      <div class="divider"><span class="arc"></span><span class="dot"></span><span class="arc"></span></div>
+      <div class="bangla" id="banglaText"></div>
+      <div class="reference" id="referenceText"></div>
+    </div>
+
+    <div class="controls">
+      <button class="nav-btn" id="prevBtn" aria-label="আগের হাদিস/দোয়া">◂ আগের</button>
+      <span class="counter" id="counter"></span>
+      <button class="nav-btn" id="nextBtn" aria-label="পরের হাদিস/দোয়া">পরের ▸</button>
+    </div>
+
+    <button class="share-btn" id="shareBtn">বন্ধুদের সাথে শেয়ার করুন</button>
+
+    <!-- Monetag creatives (banner/native) can render here if your zone is set to a fixed placement -->
+    <div class="ad-slot" id="adSlot"></div>
+  </main>
+
+  <footer>iqrabdblog &nbsp;•&nbsp; প্রতিদিন নতুন হাদিস ও দোয়া</footer>
+</div>
+
+<script>
+  // ------------------------------------------------------------------
+  // SAMPLE CONTENT — এটা একটা টেমপ্লেট। আপনার নিজের হাদিস/দোয়া লিস্ট
+  // দিয়ে নিচের অ্যারেটা replace করে দিন। প্রতিটা আইটেমে kind, arabic,
+  // bangla, reference থাকা দরকার।
+  // ------------------------------------------------------------------
+  const CONTENT = [
+    {
+      kind: "হাদিস — ১",
+      arabic: "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
+      bangla: "নিশ্চয়ই সকল আমল নিয়তের উপর নির্ভরশীল, আর প্রত্যেক ব্যক্তি তা-ই পাবে যা সে নিয়ত করেছে।",
+      reference: "সহীহ বুখারী, হাদিস নং ১ · সহীহ মুসলিম, হাদিস নং ১৯০৭"
+    },
+    {
+      kind: "হাদিস — ২",
+      arabic: "مَنْ حُسْنِ إِسْلَامِ الْمَرْءِ تَرْكُهُ مَا لَا يَعْنِيهِ",
+      bangla: "যে বিষয় তার সাথে সম্পর্কিত নয়, তা পরিত্যাগ করাই একজন মানুষের উত্তম ইসলামের একটি লক্ষণ।",
+      reference: "জামে তিরমিযী, হাদিস নং ২৩১৭"
+    },
+    {
+      kind: "হাদিস — ৩",
+      arabic: "لَا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+      bangla: "তোমাদের কেউ ততক্ষণ পর্যন্ত পূর্ণ মুমিন হবে না, যতক্ষণ না সে তার ভাইয়ের জন্য তা-ই পছন্দ করে, যা সে নিজের জন্য পছন্দ করে।",
+      reference: "সহীহ বুখারী, হাদিস নং ১৩ · সহীহ মুসলিম, হাদিস নং ৪৫"
+    },
+    {
+      kind: "হাদিস — ৪",
+      arabic: "الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
+      bangla: "প্রকৃত মুসলিম সে-ই, যার জিহ্বা ও হাত থেকে অন্য মুসলিমরা নিরাপদ থাকে।",
+      reference: "সহীহ বুখারী, হাদিস নং ১০"
+    },
+    {
+      kind: "হাদিস — ৫",
+      arabic: "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",
+      bangla: "তোমাদের মধ্যে সর্বোত্তম ব্যক্তি সে, যে কুরআন শিখে এবং অপরকে শেখায়।",
+      reference: "সহীহ বুখারী, হাদিস নং ৫০২৭"
+    },
+    {
+      kind: "হাদিস — ৬",
+      arabic: "الدِّينُ النَّصِيحَةُ",
+      bangla: "দ্বীন হলো কল্যাণকামিতা তথা আন্তরিক উপদেশ।",
+      reference: "সহীহ মুসলিম, হাদিস নং ৫৫"
+    },
+    {
+      kind: "হাদিস — ৭",
+      arabic: "مَنْ لَا يَرْحَمُ لَا يُرْحَمُ",
+      bangla: "যে অন্যের প্রতি দয়া করে না, তার প্রতিও দয়া করা হয় না।",
+      reference: "সহীহ বুখারী, হাদিস নং ৫৯৯৭"
+    },
+    {
+      kind: "হাদিস — ৮",
+      arabic: "الطُّهُورُ شَطْرُ الْإِيمَانِ",
+      bangla: "পবিত্রতা ঈমানের অর্ধেক।",
+      reference: "সহীহ মুসলিম, হাদিস নং ২২৩"
+    },
+    {
+      kind: "হাদিস — ৯",
+      arabic: "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الْآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+      bangla: "যে আল্লাহ ও শেষ দিবসের প্রতি বিশ্বাসী, সে যেন ভালো কথা বলে অথবা চুপ থাকে।",
+      reference: "সহীহ বুখারী, হাদিস নং ৬০১৮ · সহীহ মুসলিম, হাদিস নং ৪৭"
+    },
+    {
+      kind: "হাদিস — ১০",
+      arabic: "التَّاجِرُ الصَّدُوقُ الْأَمِينُ مَعَ النَّبِيِّينَ وَالصِّدِّيقِينَ وَالشُّهَدَاءِ",
+      bangla: "সত্যবাদী ও বিশ্বস্ত ব্যবসায়ী কিয়ামতের দিন নবী, সিদ্দীক ও শহীদগণের সাথে থাকবেন।",
+      reference: "জামে তিরমিযী, হাদিস নং ১২০৯"
+    }
+  ];
+
+  let idx = 0;
+
+  const arabicEl = document.getElementById('arabicText');
+  const banglaEl = document.getElementById('banglaText');
+  const refEl = document.getElementById('referenceText');
+  const kindEl = document.getElementById('kindTag');
+  const counterEl = document.getElementById('counter');
+  const card = document.getElementById('card');
+
+  function render(){
+    const item = CONTENT[idx];
+    kindEl.textContent = item.kind;
+    arabicEl.textContent = item.arabic;
+    banglaEl.textContent = item.bangla;
+    refEl.textContent = item.reference;
+    counterEl.textContent = (idx+1) + " / " + CONTENT.length;
+
+    card.style.animation = 'none';
+    void card.offsetWidth;
+    card.style.animation = '';
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    idx = (idx - 1 + CONTENT.length) % CONTENT.length;
+    render();
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    idx = (idx + 1) % CONTENT.length;
+    render();
+  });
+
+  document.getElementById('shareBtn').addEventListener('click', () => {
+    const item = CONTENT[idx];
+    const text = item.bangla + "\n\n— " + item.reference;
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.switchInlineQuery) {
+      window.Telegram.WebApp.switchInlineQuery(text, ['users','groups','channels']);
+    } else if (navigator.share) {
+      navigator.share({ text: text });
+    } else {
+      navigator.clipboard.writeText(text);
+      alert('কপি করা হয়েছে');
+    }
+  });
+
+  const dateLine = document.getElementById('dateLine');
+  const today = new Date();
+  const bnDate = today.toLocaleDateString('bn-BD', { year:'numeric', month:'long', day:'numeric' });
+  dateLine.textContent = bnDate;
+
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.ready();
+    window.Telegram.WebApp.expand();
+  }
+
+  render();
+</script>
+
+</body>
+</html>
