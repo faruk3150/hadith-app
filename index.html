@@ -373,6 +373,22 @@
   }
 
   render();
+
+  // Monetag In-App Interstitial — shows up to 2 ads within 6 minutes of a
+  // session, 30s apart, with a 5s delay before the first. Session persists
+  // across page navigation (last param 0).
+  if (typeof show_11274388 === 'function') {
+    show_11274388({
+      type: 'inApp',
+      inAppSettings: {
+        frequency: 2,
+        capping: 0.1,
+        interval: 30,
+        timeout: 5,
+        everyPage: false
+      }
+    });
+  }
 </script>
 
 </body>
