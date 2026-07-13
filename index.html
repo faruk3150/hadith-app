@@ -377,18 +377,24 @@
   // Monetag In-App Interstitial — shows up to 2 ads within 6 minutes of a
   // session, 30s apart, with a 5s delay before the first. Session persists
   // across page navigation (last param 0).
-  if (typeof show_11274388 === 'function') {
-    show_11274388({
-      type: 'inApp',
-      inAppSettings: {
-        frequency: 2,
-        capping: 0.1,
-        interval: 30,
-        timeout: 5,
-        everyPage: false
-      }
-    });
-  }
+  // The SDK script loads asynchronously, so we poll briefly until the
+  // show_11274388 function actually exists before calling it.
+  (function waitForMonetagSDK(attemptsLeft){
+    if (typeof show_11274388 === 'function') {
+      show_11274388({
+        type: 'inApp',
+        inAppSettings: {
+          frequency: 2,
+          capping: 0.1,
+          interval: 30,
+          timeout: 5,
+          everyPage: false
+        }
+      });
+    } else if (attemptsLeft > 0) {
+      setTimeout(() => waitForMonetagSDK(attemptsLeft - 1), 300);
+    }
+  })(20);
 </script>
 
 </body>
